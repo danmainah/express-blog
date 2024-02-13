@@ -19,6 +19,20 @@ app.get('/post',(req, res) => {
     res.render('post')
 })
 
+//connect to database
+const mongoose = require('mongoose');
+const dbpath = require('./dbkey');
+
+mongoose.connect(dbpath, { useNewUrlParser: true, useUnifiedTopology: true });
+const db = mongoose.connection;
+
+db.on('error', console.error.bind(console, 'Connection error:'));
+db.once('open', function() {
+  console.log('Connected to the database successfully');
+});
+
+const Test = require('./test')
+Test()
 app.listen(4000, () => {
     console.log('App listening on port 4000')
 })
