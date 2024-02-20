@@ -36,12 +36,16 @@ app.get('/contact',(req, res) => {
 app.get('/about',(req, res) => {
     res.render('about')
 })
-app.get('/post',(req, res) => {
-    res.render('post')
-})
 
 app.get('/post/new',(req, res) => {
     res.render('create')
+})
+
+app.get('/post/:id', async(req, res) => {
+    const post = await BlogPost.findById(req.params.id)
+    res.render('post', {
+        post: post
+    })
 })
 
 app.post('/posts/store', async (req,res) => {
