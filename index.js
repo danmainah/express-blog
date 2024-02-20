@@ -2,22 +2,7 @@ const express = require('express')
 const app = new express()
 const path = require('path')
 const ejs = require('ejs')
-
-app.use(express.static('public'))
-app.set('view engine', 'ejs')
-
-app.get('/',(req, res) => {
-    res.render('index')
-})
-app.get('/contact',(req, res) => {
-    res.render('contact')
-})
-app.get('/about',(req, res) => {
-    res.render('about')
-})
-app.get('/post',(req, res) => {
-    res.render('post')
-})
+const bodyParser = require('body-parser')
 
 //connect to database
 const mongoose = require('mongoose');
@@ -31,8 +16,43 @@ db.once('open', function() {
   console.log('Connected to the database successfully');
 });
 
-const Test = require('./test')
-Test()
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({extended: true}))
+
+app.use(express.static('public'))
+app.set('view engine', 'ejs')
+
+const BlogPost = require('./models/BlogPost')
+
+app.get('/', async (req, res) => {
+    const posts = await BlogPost.find({})
+    res.render('index',{
+        posts: posts
+    })
+})
+app.get('/contact',(req, res) => {
+    res.render('contact')
+})
+app.get('/about',(req, res) => {
+    res.render('about')
+})
+app.get('/post',(req, res) => {
+    res.render('post')
+})
+
+app.get('/post/new',(req, res) => {
+    res.render('create')
+})
+
+app.post('/posts/store', async (req,res) => {
+    await BlogPost.create({
+        title: req.body.title,
+        body: req.body.body
+      })
+    res.redirect('/')
+})
+
+
 app.listen(4000, () => {
     console.log('App listening on port 4000')
 })
