@@ -27,6 +27,15 @@ app.set('view engine', 'ejs')
 
 const BlogPost = require('./models/BlogPost')
 
+const validateMiddleWare = (req,res,next)=>{
+    if(req.files == null || req.body.title == null || req.body.title == null){
+    return res.redirect('/post/new')
+    }
+    next()
+}
+
+app.use('/posts/store',validateMiddleWare)
+
 app.get('/', async (req, res) => {
     const posts = await BlogPost.find({})
     res.render('index',{
