@@ -6,7 +6,7 @@ const bodyParser = require('body-parser')
 
 //connect to database
 const mongoose = require('mongoose');
-const dbpath = require('./dbkey');
+const dbpath = require('./key');
 
 mongoose.connect(dbpath, { useNewUrlParser: true, useUnifiedTopology: true });
 const db = mongoose.connection;
@@ -16,6 +16,9 @@ db.once('open', function() {
   console.log('Connected to the database successfully');
 });
 
+const fileUpload = require('express-fileupload')
+
+app.use(fileUpload())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}))
 
@@ -48,12 +51,16 @@ app.get('/post/:id', async(req, res) => {
     })
 })
 
-app.post('/posts/store', async (req,res) => {
-    await BlogPost.create({
-        title: req.body.title,
-        body: req.body.body
-      })
-    res.redirect('/')
+app.post('/posts/store',(req,res) => {
+    let image = req.files.image
+    image.mv(path.resolve(__dirname,'public/img',image.name), async (error) => {
+        await BlogPost.create({
+            title: req.body.title,
+            body: req.body.body,
+            image: '/img/' + image.name
+          })
+        res.redirect('/')
+    });
 })
 
 
