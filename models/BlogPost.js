@@ -2,8 +2,16 @@ const mongooose = require('mongoose')
 const Schema = mongooose.Schema
 
 const BlogPostSchema = new Schema({
-    title: String,
-    body: String,username: String,
+    title: {
+        type: String,
+        required: true,
+        unique: true
+        },
+    body: {
+        type: String,
+        required: true,
+        },
+    username: String,
     datePosted:{ /* can declare property type with an object like this because we need 'default' */
     type: Date,
     default: new Date()

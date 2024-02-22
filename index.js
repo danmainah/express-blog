@@ -24,6 +24,16 @@ app.use(bodyParser.urlencoded({extended: true}))
 app.use(express.static('public'))
 app.set('view engine', 'ejs')
 
+const newUserController = require('./controllers/newUser')
+const storeUserController = require('./controllers/storeUser')
+const loginController = require('./controllers/login')
+const loginUserController = require('./controllers/loginUser')
+
+app.get('/auth/login', loginController)
+app.post('/users/login', loginUserController)
+app.get('/auth/register', newUserController)
+app.post('/users/register', storeUserController)
+
 const validationMiddleware = require("./middleware/validationMiddleware");
 
 app.use('/posts/store', validationMiddleware)
