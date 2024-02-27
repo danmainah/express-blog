@@ -3,6 +3,7 @@ const app = new express()
 const ejs = require('ejs')
 const bodyParser = require('body-parser')
 const expressSession = require('express-session');
+const flash = require('connect-flash');
 
 //connect to database
 const mongoose = require('mongoose');
@@ -21,6 +22,7 @@ const fileUpload = require('express-fileupload')
 app.use(fileUpload())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}))
+app.use(flash());
 app.use(expressSession({
     secret: 'keyboard',
     resave: false,
@@ -60,7 +62,7 @@ const storePostController = require('./controllers/storePost')
 const getPostController = require('./controllers/getPost');
 
 app.get('/',homeController)
-app.get('/post/new',authMiddleware ,newPostController)
+app.get('/posts/new',authMiddleware ,newPostController)
 app.get('/post/:id',getPostController)
 app.post('/posts/store', authMiddleware, storePostController)
 

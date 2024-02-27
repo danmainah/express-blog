@@ -5,19 +5,25 @@ module.exports = async (req, res) => {
     const { username, password } = req.body;
     try {
         const user = await User.findOne({ username: username });
-        if (user) {
-            const same = await bcrypt.compare(password, user.password);
-            if (same) { // if passwords match
-                req.session.userId = user._id
-                res.redirect('/');
-            } else {
-                res.redirect('/auth/login');
-            }
+        const same = await bcrypt.compare(password, user.password);
+        if (same) { // if passwords match
+            req.session.userId = user._id;
+            res.redirect('/');
         } else {
-            res.redirect('/auth/register');
+            const logErrors = ["Incorrect password."];
+            req.flash('validationErrors', logErrors);
+            req.flash('data', req.body);
+            res.redirect('/auth/login');
         }
     } catch (error) {
-        // handle error
-        console.error(error);
+        let logErrors = [];
+        if (error.errors) {
+            logErrors = Object.keys(error.errors).map(key => error.errors[key].message);
+        } else {
+            logErrors = [error.message];
+        }
+        req.flash('validationErrors', logErrors);
+        req.flash('data', req.body);
+        res.redirect('/auth/login');
     }
 };
