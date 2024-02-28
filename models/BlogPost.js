@@ -11,7 +11,11 @@ const BlogPostSchema = new Schema({
         type: String,
         required: [true,'Please provide Description'],
         },
-    username: String,
+    userid:{
+        type: mongooose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
+        },
     datePosted:{ /* can declare property type with an object like this because we need 'default' */
     type: Date,
     default: new Date()

@@ -7,14 +7,13 @@ image.mv(path.resolve(__dirname,'..','public/img',image.name),async (error)=>{
         const post = await BlogPost.create({
             title: req.body.title,
             body: req.body.body,
-            image: '/img/' + image.name
+            image: '/img/' + image.name,
+            userid: req.session.userId
         })
         res.redirect('/')
     }
     catch(error){
-        console.log(error)
         const postErrors = Object.keys(error.errors).map(key => error.errors[key].message);
-        console.log("imefika hapa")
         req.flash('validationErrors',postErrors)
         req.flash('data',req.body)
         res.redirect('/posts/new');
