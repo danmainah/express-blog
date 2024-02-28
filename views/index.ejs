@@ -26,7 +26,7 @@
                         <a href="/post/<%=posts[i]._id
                         %>">
                             <h2 class="post-title"><%= posts[i].title %></h2>
-                            <h3 class="post-subtitle"><%= posts[i].body %></h3>
+                            <h3 class="post-subtitle"> <%- posts[i].body %></h3>
                         </a>
                         <p class="post-meta">Posted by
                             <a href="#"><%= posts[i].userid.username %></a>

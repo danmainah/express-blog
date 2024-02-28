@@ -13,7 +13,8 @@ module.exports = (req, res) =>{
             errors: req.flash('validationErrors'),
             title: title,
             body: body,
-            image: image
+            image: image,
+            createPost: true
         });
         }
     res.redirect('/posts/new')
